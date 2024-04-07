@@ -8,8 +8,13 @@ const StudentSchema = new Schema({
   role: { type: String, default: 'student' },
   joinedAt: { type: Date, default: Date.now },
   lenguage:{ type: String,required: true  },
-  goal:{ type: String,required: true  }
+  goal:{ type: String,required: true  },
+  instaram:String,
+  teacherRates: [String],
+  appoinments:[Date],
+  history:[String]
 });
+
 
 
 
