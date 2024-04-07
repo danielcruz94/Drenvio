@@ -1,8 +1,8 @@
 const mongoose=require('mongoose')
 mongoose.set('strictQuery', false);
-const password ='moM5f3AodwLE5d0A'
+const password ='12345'
 
-const connectionString=`mongodb://drenvio:${password}@ac-aemgtkt-shard-00-00.unqyghm.mongodb.net:27017,ac-aemgtkt-shard-00-01.unqyghm.mongodb.net:27017,ac-aemgtkt-shard-00-02.unqyghm.mongodb.net:27017/sneakers_store?replicaSet=atlas-y8oxsk-shard-0&ssl=true&authSource=admin`
+const connectionString=`mongodb+srv://daniel94cruz:${password}@cluster0.ecmhoaq.mongodb.net/Benji?retryWrites=true&w=majority&appName=Cluster0`
 
 const connectDB=async() => {
    await mongoose.connect(connectionString)

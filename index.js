@@ -3,7 +3,7 @@ const express=require('express');
 const app=express ();
 const cors=require("cors")
 
-const productRouter=require('./Routes/products')
+const usersRouter=require('./Routes/users')
 
 
 connectDB()
@@ -15,9 +15,9 @@ app.use(express.json());
 
 
 
-console.log('shjbnsjnbsjnjnsjsnj')
 
-app.use('/api',productRouter)
+
+app.use('/api',usersRouter)
 
   
 
