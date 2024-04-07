@@ -1,11 +1,11 @@
 const Router = require('express').Router();
-const {getProducts, getPriceSpecial}= require('../Controllers/getProducts')
-
-console.log('eeijienei')
+const {login}= require('../Controllers/Users')
 
 
-Router.get('/products',getProducts)
-Router.get('/price/:user_id/:nombre_producto',getPriceSpecial)
+
+
+Router.get('/login',login)
+
 
 
 module.exports=Router;
