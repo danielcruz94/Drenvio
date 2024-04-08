@@ -5,7 +5,7 @@ const StudentSchema = new Schema({
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
   picture: { type: String, default: 'fotoPerfil' },  
-  role: { type: String, default: 'student' },
+  role: { type: String,required: true  },
   joinedAt: { type: Date, default: Date.now },
   lenguage:{ type: String,required: true  },
   goal:{ type: String,required: true  },
