@@ -1,25 +1,22 @@
 const { Schema, model } = require('mongoose');
 
-const StudentSchema = new Schema({
+const TutorSchema = new Schema({
   name: { type: String }, // Default value for name
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
   picture: { type: String, default: 'fotoPerfil' },  
-  role: { type: String, default: 'student' },
+  role: { type: String, default: 'tutor' },
   joinedAt: { type: Date, default: Date.now },
   lenguage:{ type: String,required: true  },
-  goal:{ type: String,required: true  },
-  teacherRates: [String],
+  Rates: [String],
   appoitnments:[Date],
-  history:[String],
-  instagram:{ type: String},
-  price:{type: Number,default: 5}
+  history:[String]
 });
 
 
 
 
-StudentSchema.set('toJSON', {
+TutorSchema.set('toJSON', {
   transform: (document, returnedObject)=>{
     returnedObject.id = returnedObject._id
     delete returnedObject._id
@@ -32,10 +29,10 @@ StudentSchema.set('toJSON', {
 )
 
 
-const Student = model('Student', StudentSchema);
+const Tutor = model('Tutor', TutorSchema);
 
-// Exporta el modelo Student explícitamente
-module.exports = Student;
+
+module.exports = Tutor;
 
 
 
