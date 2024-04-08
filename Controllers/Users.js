@@ -42,7 +42,7 @@ token,
 const  newStudent =async (req, res) => {
     try {
         const { body } = req;
-        const { name, email, password,picture,role,lenguage,goal,rol } = body;
+        const { name, email, password,picture,role,lenguage,goal,price,instagram } = body;
 
         const saltRound=10;
         const passwordHash=await bcrypt.hash(password,saltRound)
@@ -54,7 +54,8 @@ const  newStudent =async (req, res) => {
             picture,
             lenguage,
             goal,
-            rol
+            price,
+            instagram
         });
 
         const savedStudent = await student.save();

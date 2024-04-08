@@ -10,7 +10,7 @@ const StudentSchema = new Schema({
   lenguage:{ type: String,required: true  },
   goal:{ type: String,required: true  },
   teacherRates: [String],
-  appoitnments:[Date],
+  appointments:[Date],
   history:[String],
   instagram:{ type: String},
   price:{type: Number,default: 5}
