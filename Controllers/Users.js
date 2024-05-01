@@ -42,7 +42,7 @@ token,
 const  newStudent =async (req, res) => {
     try {
         const { body } = req;
-        const { name,lastName, email, password,picture,role,lenguage,goal,price,instagram } = body;
+        const { name,lastName, email, password } = body;
 
         const saltRound=10;
         const passwordHash=await bcrypt.hash(password,saltRound)
@@ -50,13 +50,8 @@ const  newStudent =async (req, res) => {
             name,
             email,
             lastName,
-            passwordHash,
-            role,
-            picture,
-            lenguage,
-            goal,
-            price,
-            instagram
+            passwordHash
+           
         });
 
         const savedUser = await user.save();
@@ -75,18 +70,28 @@ try {
   console.log(error)
 }
 
-
-
-
-
-
-
-
-
-
-
-
 }
+
+const completeInfo =async (req, res) => {
+  
+
+  const { body } = req;
+  const { picture,role,lenguage,goal,price,instagram } = body;
+
+  try {
+    const updateUser=await User.findOneAndUpdate(
+      { email: "correo@ejemplo.com" }, // Buscar por correo electrónico
+      { $set: { name: "Nuevo nombre" } }, // Establecer el nuevo nombre
+      { new: true })
+    res.status(200).json(updateUser)
+
+  } catch (error) {
+    console.log(error)
+  }
+  
+  }
+
+
 
 
 

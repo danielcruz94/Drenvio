@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   lastName:{ type: String }, // Default value for name
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
-  picture: { type: String, default: 'fotoPerfil' },  
+  picture: { type: String, default: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' },  
   role: { type: String },
   joinedAt: { type: Date, default: Date.now },
   lenguage:{ type: String },
