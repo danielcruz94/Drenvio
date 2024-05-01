@@ -1,7 +1,7 @@
 const bcrypt=require('bcrypt')
 const jwt= require('jsonwebtoken')
 
-const Student = require('../models/Student');
+const User = require('../models/User');
 
 
 
@@ -10,13 +10,13 @@ const login =async (req, res) => {
   const { body } = req;
   const {email,password}=body;
 
-const student=await Student.findOne({email})
+const user=await User.findOne({email})
 
-const passwordCorrect=student===null 
+const passwordCorrect=user===null 
 ? false
-:await bcrypt.compare(password,student.passwordHash)
+:await bcrypt.compare(password,User.passwordHash)
 
-if(!(student&&passwordCorrect)){
+if(!(user&&passwordCorrect)){
 res.status(401).json({
   "error":"invalid email or password"
 })
@@ -24,16 +24,16 @@ res.status(401).json({
 
 
 const userForToken={
-email:student.email,
-id:student._id
+email:user.email,
+id:user._id
 
 }
 
 const token =jwt.sign(userForToken,process.env.SECRET)
 
 res.send({
-name:student.name,
-email:student.email,
+name:user.name,
+email:user.email,
 token,
 
 })
@@ -46,7 +46,7 @@ const  newStudent =async (req, res) => {
 
         const saltRound=10;
         const passwordHash=await bcrypt.hash(password,saltRound)
-        const student = new Student({
+        const user = new User({
             name,
             email,
             passwordHash,
@@ -58,7 +58,7 @@ const  newStudent =async (req, res) => {
             instagram
         });
 
-        const savedStudent = await student.save();
+        const savedUser = await user.save();
         res.json({message:"Usuario creado correctamente"});
     } catch (error) {
         console.error(error);
@@ -68,7 +68,7 @@ const  newStudent =async (req, res) => {
 const getUsers =async (req, res) => {
   
 try {
-  const users=await Student.find()
+  const users=await User.find()
   res.status(200).json(users)
 } catch (error) {
   console.log(error)

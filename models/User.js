@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const StudentSchema = new Schema({
+const UserSchema = new Schema({
   name: { type: String }, // Default value for name
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
@@ -19,7 +19,7 @@ const StudentSchema = new Schema({
 
 
 
-StudentSchema.set('toJSON', {
+UserSchema.set('toJSON', {
   transform: (document, returnedObject)=>{
     returnedObject.id = returnedObject._id
     delete returnedObject._id
@@ -32,10 +32,10 @@ StudentSchema.set('toJSON', {
 )
 
 
-const Student = model('Student', StudentSchema);
+const User = model('User', UserSchema);
 
 // Exporta el modelo Student explícitamente
-module.exports = Student;
+module.exports = User;
 
 
 
