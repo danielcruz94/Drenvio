@@ -5,10 +5,10 @@ const StudentSchema = new Schema({
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
   picture: { type: String, default: 'fotoPerfil' },  
-  role: { type: String,required: true  },
+  role: { type: String },
   joinedAt: { type: Date, default: Date.now },
-  lenguage:{ type: String,required: true  },
-  goal:{ type: String,required: true  },
+  lenguage:{ type: String },
+  goal:{ type: String },
   teacherRates: [String],
   appointments:[Date],
   history:[String],

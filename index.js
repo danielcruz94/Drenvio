@@ -9,7 +9,7 @@ const usersRouter=require('./Routes/users')
 connectDB()
 require('dotenv').config();
 
-
+app.use(cors());
 
 app.use(express.json());
 
