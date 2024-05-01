@@ -42,13 +42,14 @@ token,
 const  newStudent =async (req, res) => {
     try {
         const { body } = req;
-        const { name, email, password,picture,role,lenguage,goal,price,instagram } = body;
+        const { name,lastName, email, password,picture,role,lenguage,goal,price,instagram } = body;
 
         const saltRound=10;
         const passwordHash=await bcrypt.hash(password,saltRound)
         const user = new User({
             name,
             email,
+            lastName,
             passwordHash,
             role,
             picture,

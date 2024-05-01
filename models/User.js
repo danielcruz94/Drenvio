@@ -1,7 +1,8 @@
 const { Schema, model } = require('mongoose');
 
 const UserSchema = new Schema({
-  name: { type: String }, // Default value for name
+  name: { type: String },
+  lastName:{ type: String }, // Default value for name
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
   picture: { type: String, default: 'fotoPerfil' },  
@@ -13,7 +14,7 @@ const UserSchema = new Schema({
   appointments:[Date],
   history:[String],
   instagram:{ type: String},
-  price:{type: Number,default: 5}
+  price:{type: Number}
 });
 
 
