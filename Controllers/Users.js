@@ -34,9 +34,11 @@ res.status(200).json({ error:"Invalid Email or Password"})
   email:user.email,
   id:user._id
   }
+  const expiresIn = 60 * 60; // 1 hour
 
 
-  const token =jwt.sign(userForToken,process.env.SECRET)
+
+  const token =jwt.sign(userForToken,process.env.SECRET,{expiresIn})
   
   res.send({
   name:user.name,
