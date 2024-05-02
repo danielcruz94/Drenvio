@@ -9,35 +9,54 @@ const login =async (req, res) => {
   
   const { body } = req;
   const {email,password}=body;
+  
 
 const user=await User.findOne({email})
 
+
+
+
+
 const passwordCorrect=user===null 
 ? false
-:await bcrypt.compare(password,User.passwordHash)
+:await bcrypt.compare(password,user.passwordHash)
+
+// console.log(passwordCorrect)
+
+
 
 if(!(user&&passwordCorrect)){
-res.status(401).json({
-  "error":"invalid email or password"
+res.status(401).json({ "error":"invalid email or password"})
+
+}else{
+  
+  const userForToken={
+  email:user.email,
+  id:user._id
+  }
+
+
+  const token =jwt.sign(userForToken,process.env.SECRET)
+  
+  res.send({
+  name:user.name,
+  email:user.email,
+  token,
+  
 })
+
+
+
+  }
+  
 }
 
 
-const userForToken={
-email:user.email,
-id:user._id
 
-}
 
-const token =jwt.sign(userForToken,process.env.SECRET)
 
-res.send({
-name:user.name,
-email:user.email,
-token,
 
-})
-}
+
 
 const  newStudent =async (req, res) => {
     try {

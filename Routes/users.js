@@ -4,7 +4,7 @@ const {login,newStudent, getUsers}= require('../Controllers/Users')
 
 
 
-Router.get('/login',login)
+Router.post('/login',login)
 Router.get('/users',getUsers)
 Router.post('/signup',newStudent)
 
