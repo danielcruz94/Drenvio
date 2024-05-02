@@ -26,7 +26,7 @@ const passwordCorrect=user===null
 
 
 if(!(user&&passwordCorrect)){
-res.status(401).json({ "error":"invalid email or password"})
+res.status(200).json({ error:"Invalid Email or Password"})
 
 }else{
   
