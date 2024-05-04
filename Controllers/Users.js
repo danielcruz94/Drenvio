@@ -16,7 +16,7 @@ const passwordCorrect=user===null
 ? false
 :await bcrypt.compare(password,user.passwordHash)
 
-console.log(passwordCorrect)
+
 
 
 
@@ -39,6 +39,7 @@ res.status(401).json({ error:"Invalid Email or Password"})
   name:user.name,
   email:user.email,
   token,
+  completeInfo:user.completeInfo
   
   
 })
@@ -78,7 +79,8 @@ const  newStudent =async (req, res) => {
             name,
             email,
             lastName,
-            passwordHash
+            passwordHash,
+            
            
         });
 
@@ -104,12 +106,19 @@ const completeInfo =async (req, res) => {
   
 
   const { body } = req;
-  const { picture,role,lenguage,goal,price,instagram } = body;
+  const { email,picture,role,lenguage,goal,price,instagram } = body;
 
   try {
     const updateUser=await User.findOneAndUpdate(
-      { email: "correo@ejemplo.com" }, // Buscar por correo electrónico
-      { $set: { name: "Nuevo nombre" } }, // Establecer el nuevo nombre
+      { email:email}, // Buscar por correo electrónico
+      { $set: { 
+        role,
+        lenguage,
+        goal,
+        price,
+        instagram
+
+       } }, // Establecer el nuevo nombre
       { new: true })
     res.status(200).json(updateUser)
 
@@ -127,7 +136,8 @@ const completeInfo =async (req, res) => {
 module.exports = {
   login,
   newStudent,
-  getUsers
+  getUsers,
+  completeInfo
     
 };
 

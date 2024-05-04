@@ -14,7 +14,8 @@ const UserSchema = new Schema({
   appointments:[Date],
   history:[String],
   instagram:{ type: String},
-  price:{type: Number}
+  price:{type: Number},
+  completeInfo:{type:Boolean,default:false}
 });
 
 
