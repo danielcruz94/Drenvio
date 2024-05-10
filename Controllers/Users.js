@@ -39,7 +39,6 @@ res.status(401).json({ error:"Invalid Email or Password"})
   name:user.name,
   email:user.email,
   token,
-  completeInfo:user.completeInfo
   
   
 })
@@ -106,27 +105,51 @@ const completeInfo =async (req, res) => {
   
 
   const { body } = req;
-  const { email,picture,role,lenguage,goal,price,instagram } = body;
-
+  const { email,picture,role,language,goal,price,instagram } = body;
   try {
     const updateUser=await User.findOneAndUpdate(
       { email:email}, // Buscar por correo electrónico
       { $set: { 
         role,
-        lenguage,
+        language,
         goal,
         price,
-        instagram
+        instagram,
+        picture,
+        completeInfo:true
 
        } }, // Establecer el nuevo nombre
       { new: true })
+     
     res.status(200).json(updateUser)
+
+ 
 
   } catch (error) {
     console.log(error)
   }
   
   }
+  const getUserData = async (req, res) => {
+    try {
+      const { email } = req.query; // Access email from query parameters
+      
+      if (!email) {
+        return res.status(400).json({ message: 'Missing required parameter: email' });
+      }
+  
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
 
 
 
@@ -137,7 +160,8 @@ module.exports = {
   login,
   newStudent,
   getUsers,
-  completeInfo
+  completeInfo,
+  getUserData
     
 };
 
