@@ -14,12 +14,13 @@ const enviarEmail = async (req, res) => {
 
     console.log(to)
 
+    
     let info = await transporter.sendMail({
-      from: 'info@torii.com',
-      to, // Cambiado para usar "to"
-      subject, // Cambiado para usar "subject"
-      text, // Cambiado para usar "body" como el texto del email
-    });
+        from: 'info@thaskify.com',
+        to: req.body.to, // Cambiado para usar "to"
+        subject: req.body.subject, // Cambiado para usar "subject"
+        text: req.body.body, // Cambiado para usar "body" como el texto del email
+      });
 
     res.send('Email enviado exitosamente');
 }
