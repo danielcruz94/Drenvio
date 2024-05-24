@@ -2,6 +2,7 @@ const connectDB=require('./dbConnection.js')
 const express=require('express');
 const app=express ();
 const cors=require("cors")
+const emailRouter =require('./Routes/email');
 
 const usersRouter=require('./Routes/users')
 
@@ -19,7 +20,7 @@ app.use(express.json());
 
 app.use('/api',usersRouter)
 
-  
+app.use('/api/email', emailRouter)
 
 const PORT=3001;
 app.listen(PORT,() =>{
