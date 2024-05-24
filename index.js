@@ -4,7 +4,8 @@ const app=express ();
 const cors=require("cors")
 const emailRouter =require('./Routes/email');
 
-const usersRouter=require('./Routes/users')
+const usersRouter=require('./Routes/users');
+const calendarRouter = require('./Routes/CalendarClass'); 
 
 
 connectDB()
@@ -19,6 +20,7 @@ app.use(express.json());
 
 
 app.use('/api',usersRouter)
+app.use('/api', calendarRouter);
 
 app.use('/api/email', emailRouter)
 
