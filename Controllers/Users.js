@@ -90,16 +90,22 @@ const  newStudent =async (req, res) => {
     }
 };
 
-const getUsers =async (req, res) => {
-  
-try {
-  const users=await User.find()
-  res.status(200).json(users)
-} catch (error) {
-  console.log(error)
-}
+const getUsers = async (req, res) => {
+  try {
+    // Filter users by role: "student"
+    const students = await User.find({ role: "Tutor" });
 
-}
+    // Check if students were found
+    if (!students.length) {
+      return res.status(404).json({ message: "No students found" });
+    }
+
+    res.status(200).json(students);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 const completeInfo =async (req, res) => {
   
