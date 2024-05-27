@@ -39,6 +39,8 @@ res.status(401).json({ error:"Invalid Email or Password"})
   name:user.name,
   email:user.email,
   token,
+  id:user._id,
+  role:user.role
   
   
 })
