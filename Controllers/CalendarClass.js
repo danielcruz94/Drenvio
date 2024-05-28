@@ -47,7 +47,11 @@ const createCalendarClass = async (req, res) => {
 
 const getAllCalendarClasses = async (req, res) => {
     try {
-        const calendarClasses = await CalendarClass.find().sort({ startTime: 1 });
+        const userId = req.query.userId; // Se espera recibir el userId en la solicitud
+        
+        // Se realiza la búsqueda en la base de datos filtrando por userId
+        const calendarClasses = await CalendarClass.find({ userId }).sort({ startTime: 1 });
+        
         res.status(200).json(calendarClasses);
     } catch (error) {
         handleServerError(res, error);
