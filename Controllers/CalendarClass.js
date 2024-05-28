@@ -96,7 +96,9 @@ const reserveCalendarClass = async (req, res) => {
 
 const getCalendarClassesByUser = async (req, res) => {
     try {
-        const studentId = req.params.studentId.toLowerCase(); // Convertir a minúsculas para asegurar consistencia
+        const studentId = req.params.studentId; // No se convierte a minúsculas
+
+        console.log(studentId)
 
         if (!studentId) {
             throw new Error('Student ID is missing.');
@@ -104,8 +106,9 @@ const getCalendarClassesByUser = async (req, res) => {
 
         console.log("Student ID received:", studentId);
 
-        // Convertir a minúsculas el valor almacenado en la base de datos para asegurar la comparación insensible a mayúsculas y minúsculas
         const calendarClasses = await CalendarClass.find({ reserved: { $regex: new RegExp('^' + studentId + '$', 'i') } }).sort({ startTime: 1 });
+
+       
 
         if (!calendarClasses || calendarClasses.length === 0) {
             throw new Error('No calendar classes found for the student.');
@@ -116,6 +119,7 @@ const getCalendarClassesByUser = async (req, res) => {
         handleServerError(res, error);
     }
 };
+
 
 
   
