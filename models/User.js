@@ -15,6 +15,7 @@ const UserSchema = new Schema({
   history:[String],
   instagram:{ type: String},
   price:{type: String},
+  teacherRates: [String],
   completeInfo:{type:Boolean,default:false},
   biography:{type: String,default:'¡Hola! Soy un apasionado/a de la conversación, los idiomas y los viajes. Me encanta conocer personas nuevas, aprender sobre diferentes culturas y explorar el mundo.Creo que la mejor manera de aprender un idioma es a través de la interacción con hablantes nativos, por eso me encantaría conversar contigo. También disfruto mucho aprendiendo sobre diferentes culturas y tradiciones. He tenido la suerte de viajar a muchos lugares diferentes y siempre estoy buscando nuevas aventuras.Si buscas un espacio para conversar, aprender un nuevo idioma o compartir tu pasión'}
 });
