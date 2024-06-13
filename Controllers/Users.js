@@ -113,7 +113,8 @@ const completeInfo =async (req, res) => {
   
 
   const { body } = req;
-  const { email,picture,role,language,goal,price,instagram } = body;
+  const { email,picture,role,language,goal,price,instagram,biography } = body;
+  
   try {
     const updateUser=await User.findOneAndUpdate(
       { email:email}, // Buscar por correo electrónico
@@ -124,7 +125,8 @@ const completeInfo =async (req, res) => {
         price,
         instagram,
         picture,
-        completeInfo:true
+        completeInfo:true,
+        biography
 
        } }, // Establecer el nuevo nombre
       { new: true })
@@ -180,8 +182,49 @@ const completeInfo =async (req, res) => {
     }
   };
 
+  const upPhoto = async (req, res) => {
+    try {
+      const { body } = req;
+      const { photo, email,reference } = body; // Set default position to -1 (invalid)
+  
+      
+  
+      const user = await User.findOne({ email });
+      if (user) {
+       if(reference===0){
+        
+        user.photos.shift()
+        user.photos.unshift(photo)
+       }
+       if(reference===2){
+        
+        user.photos.pop()
+        user.photos.push(photo)
+       }
+       else{
+        user.photos=[user.photos[0],photo,user.photos[2]]
+        
+       }
+      
+      } else {
+        console.log('User not found');
+      }
 
-
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      await user.save()
+  
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      return res.status(500).json({ message: 'Internal server error' }); // Generic error response for unexpected issues
+    }
+  };
+  
+  
+  
 
 
 
@@ -191,10 +234,10 @@ module.exports = {
   getUsers,
   completeInfo,
   getUserData,
-  getUserById
+  getUserById,
+  upPhoto
     
 };
-
 
 
 

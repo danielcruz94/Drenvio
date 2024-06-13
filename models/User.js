@@ -6,6 +6,7 @@ const UserSchema = new Schema({
   email: { type: String, required: true }, // Required field
   passwordHash: { type: String, required: true }, // Required field
   picture: { type: String, default: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' },  
+  photos: {type:[]},
   role: { type: String },
   joinedAt: { type: Date, default: Date.now },
   language:{ type: String },
