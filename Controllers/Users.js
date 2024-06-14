@@ -187,7 +187,7 @@ const completeInfo =async (req, res) => {
       const { body } = req;
       const { photo, email,reference } = body; // Set default position to -1 (invalid)
   
-      
+     
   
       const user = await User.findOne({ email });
       if (user) {
@@ -201,10 +201,12 @@ const completeInfo =async (req, res) => {
         user.photos.pop()
         user.photos.push(photo)
        }
-       else{
+       if(reference===1){
         user.photos=[user.photos[0],photo,user.photos[2]]
-        
        }
+       
+        
+       
       
       } else {
         console.log('User not found');
@@ -215,6 +217,7 @@ const completeInfo =async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
       await user.save()
+     
   
       res.status(200).json(user);
     } catch (error) {
