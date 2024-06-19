@@ -15,6 +15,8 @@ const UserSchema = new Schema({
   appointments:[Date],
   history:[String],
   instagram:{ type: String},
+  country:{ type: String},
+  connectedHours:{type:Number,default:0},
   price:{type: String},
   teacherRates: [String],
   completeInfo:{type:Boolean,default:false},
