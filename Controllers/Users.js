@@ -197,7 +197,7 @@ const completeInfo =async (req, res) => {
         user.photos.unshift(photo)
        }
        if(reference===2){
-        
+       
         user.photos.pop()
         user.photos.push(photo)
        }
