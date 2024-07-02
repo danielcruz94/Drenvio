@@ -113,9 +113,10 @@ const completeInfo =async (req, res) => {
   
 
   const { body } = req;
-  const { email,picture,role,language,goal,price,instagram,biography } = body;
+  const { email,picture,role,language,goal,price,instagram,biography,country } = body;
   
   try {
+    
     const updateUser=await User.findOneAndUpdate(
       { email:email}, // Buscar por correo electrónico
       { $set: { 
@@ -126,7 +127,8 @@ const completeInfo =async (req, res) => {
         instagram,
         picture,
         completeInfo:true,
-        biography
+        biography,
+        country
 
        } }, // Establecer el nuevo nombre
       { new: true })
