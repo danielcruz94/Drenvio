@@ -116,7 +116,7 @@ const completeInfo =async (req, res) => {
   const { email,picture,role,language,goal,price,instagram,biography,country } = body;
   
   try {
-    console.log(body)
+    
     const updateUser=await User.findOneAndUpdate(
       { email:email}, // Buscar por correo electrónico
       { $set: { 
