@@ -26,9 +26,9 @@ app.use('/api', UserOnline);
 
 app.use('/api/email', emailRouter)
 
-const PORT=3001;
-app.listen(PORT,() =>{
-    console.log(`server running on port ${PORT}`) ;
+const port= process.env.PORT|| 3001;
+app.listen(port,() =>{
+    console.log(`server running on port ${port}`) ;
 
 })
 
