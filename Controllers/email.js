@@ -24,7 +24,7 @@ const enviarEmail = async (req, res) => {
         from: 'info@thaskify.com',
         to: to,
         subject: subject,
-        text: text
+        html: text  
     });
 
     res.send('Email enviado exitosamente');
