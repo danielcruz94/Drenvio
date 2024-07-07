@@ -6,8 +6,8 @@ const enviarEmail = async (req, res) => {
         port: 465,
         secure: true,
         auth: {
-            user: 'info@thaskify.com',
-            pass: 'Proyecto001!' // Este valor debería provenir de tu entorno seguro
+            user: 'teamtoriiapp@gmail.com',
+            pass: 'dgybcegilwsjwihm' // Este valor debería provenir de tu entorno seguro
         },
         // NOTA: Desactivar la verificación del certificado temporalmente para pruebas,
         // pero asegúrate de obtener y usar un certificado SSL/TLS válido para producción.
@@ -16,12 +16,15 @@ const enviarEmail = async (req, res) => {
         }
     });
 
+    
+
+
     const { to, subject, text } = req.body;
 
     console.log(to);
 
     let info = await transporter.sendMail({
-        from: 'info@thaskify.com',
+        from: 'teamtoriiapp@gmail.com',
         to: to,
         subject: subject,
         html: text  
