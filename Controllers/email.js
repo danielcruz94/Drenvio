@@ -14,7 +14,7 @@ const enviarEmail = async (req, res) => {
 
   const { to, subject, text } = req.body;
 
-  console.log(to);
+
 
   try {
     // Send the email using the transporter
