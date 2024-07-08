@@ -1,36 +1,35 @@
+
+
 const nodemailer = require('nodemailer');
 
 const enviarEmail = async (req, res) => {
-    let transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.eu',
-        port: 465,
-        secure: true,
-        auth: {
-            user: 'teamtoriiapp@gmail.com',
-            pass: 'dgybcegilwsjwihm' // Este valor debería provenir de tu entorno seguro
-        },
-        // NOTA: Desactivar la verificación del certificado temporalmente para pruebas,
-        // pero asegúrate de obtener y usar un certificado SSL/TLS válido para producción.
-        tls: {
-            rejectUnauthorized: false // Desactiva la verificación del certificado
-        }
-    });
+  // Use the correct email address and password for teamtoriiapp@gmail.com
+  const transporter = nodemailer.createTransport({
+    service: 'gmail', // Use Gmail's SMTP server
+    auth: {
+      user: 'teamtoriiapp@gmail.com', // Replace with actual sender email
+      pass: 'dgybcegilwsjwihm', // Replace with actual app password (not regular password)
+    },
+  });
 
-    
+  const { to, subject, text } = req.body;
 
+  console.log(to);
 
-    const { to, subject, text } = req.body;
-
-    console.log(to);
-
-    let info = await transporter.sendMail({
-        from: 'teamtoriiapp@gmail.com',
-        to: to,
-        subject: subject,
-        html: text  
+  try {
+    // Send the email using the transporter
+    await transporter.sendMail({
+      from: 'teamtoriiapp@gmail.com', // Replace with actual sender email
+      to: to,
+      subject: subject,
+      html: text,
     });
 
     res.send('Email enviado exitosamente');
-}
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al enviar el correo electrónico');
+  }
+};
 
 module.exports = enviarEmail;
