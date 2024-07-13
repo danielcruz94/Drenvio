@@ -52,10 +52,10 @@ const handleServerError = (res, error) => {
         const userId = req.params.id;
         
         try {          
-             console.log(userId)
+             
             // Verificar la existencia del usuario por su userId
             const user = await User.findOne({ userId });
-            console.log(user)
+            
             // Devolver true si el usuario existe, false si no existe
             if (user) {
                 return res.status(200).json({ exists: true });
@@ -73,18 +73,22 @@ const handleServerError = (res, error) => {
     const deleteUserById = async (req, res) => {
         try {
             const { userId } = req.params;
-
+    
             // Buscar y eliminar el usuario
             const deletedUser = await User.findOneAndDelete({ userId });
+    
             if (!deletedUser) {
                 return res.status(404).json({ message: 'Usuario no encontrado.' });
             }
-
+    
             res.status(200).json({ message: 'Usuario eliminado exitosamente.' });
         } catch (error) {
-            handleServerError(res, error);
+            // Si ocurre un error durante la operación, manejarlo adecuadamente
+            console.error("Error al eliminar usuario:", error);
+            return res.status(500).json({ message: 'Ocurrió un error al intentar eliminar el usuario.' });
         }
     };
+    
 
 module.exports = {
     addUser,
