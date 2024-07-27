@@ -8,6 +8,7 @@ const usersRouter=require('./Routes/users');
 const calendarRouter = require('./Routes/CalendarClass'); 
 const UserOnline = require('./Routes/UserOnline.js'); 
 
+const PaypalRouter=require('./Routes/paypal_payment')
 
 connectDB()
 require('dotenv').config();
@@ -23,8 +24,8 @@ app.use(express.json());
 app.use('/api',usersRouter)
 app.use('/api', calendarRouter);
 app.use('/api', UserOnline);
-
 app.use('/api/email', emailRouter)
+app.use('/api',PaypalRouter );
 
 const port= process.env.PORT|| 3001;
 app.listen(port,() =>{
