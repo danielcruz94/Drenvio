@@ -1,11 +1,12 @@
 const Router = require('express').Router();
 
-const {createdOrder,capturedOrder,cancelOrder}=require('../Controllers/payments')
+const {createdOrder,capturedOrder,cancelOrder,statusOrder}=require('../Controllers/payments')
 
 
-Router.get('/createdorder',createdOrder)
+Router.post('/createdorder',createdOrder)
 Router.get('/capturedorder',capturedOrder)
 Router.get('/cancelpayment',cancelOrder)
+Router.post('/statuspayment',statusOrder)
 
 
 
