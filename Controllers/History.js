@@ -93,6 +93,7 @@ const User = require('../models/User'); // Modelo para los usuarios
 
             // Convertir userId a ObjectId
             const userObjectId = mongoose.Types.ObjectId(userId);
+            
 
             // 1. Buscar asistencias para el usuario especificado
             const attendances = await Attendance.find({
@@ -124,7 +125,7 @@ const User = require('../models/User'); // Modelo para los usuarios
             // 6. Consultar todos los usuarios relacionados con estos IDs
             const users = await User.find({
                 _id: { $in: allUserIds }
-            }).select('name lastName');
+            }).select('name lastName role');
 
             // 7. Enviar la respuesta con los datos obtenidos
             res.status(200).json({
