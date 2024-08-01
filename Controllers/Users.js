@@ -40,7 +40,8 @@ const User = require('../models/User');
         email:user.email,
         token,
         id:user._id,
-        role:user.role
+        role:user.role,
+        price:user.price 
         
         
       })
