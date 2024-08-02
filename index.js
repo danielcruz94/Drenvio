@@ -16,18 +16,7 @@ const PaypalRouter = require('./Routes/paypal_payment.js');
 connectDB()
 require('dotenv').config();
 
-//app.use(cors());
-const allowedOrigins = ['https://192.168.1.51:5173', 'https://toriiapp.netlify.app/'];
-
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-}));
+app.use(cors());
 
 
 app.use(express.json());
