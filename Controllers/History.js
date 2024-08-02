@@ -141,9 +141,40 @@ const User = require('../models/User'); // Modelo para los usuarios
         }
     };
 
+    //Conteo de asistencias 
+    const getAttendanceCountByUserId = async (req, res) => {
+        try {
+            const { userId } = req.params;
+    
+            // Validar si userId es un ObjectId válido
+            if (!mongoose.Types.ObjectId.isValid(userId)) {
+                return res.status(400).json({ message: 'ID de usuario inválido.' });
+            }
+    
+            // Convertir userId a ObjectId
+            const userObjectId = mongoose.Types.ObjectId(userId);
+    
+            // Contar el total de asistencias que cumplen con los criterios
+            const totalAttendances = await Attendance.countDocuments({
+                userId: userObjectId,
+                attended: true
+            });
+    
+            // Enviar la respuesta con el total de asistencias
+            res.status(200).json({
+                total: totalAttendances
+            });
+        } catch (error) {
+            // Manejo de errores
+            res.status(500).json({ message: 'Error en el servidor.', error });
+        }
+    };
+    
+
 
 module.exports = {
     createAttendance,
     updateAttendanceByUserId,
-    getAttendancesByUserId
+    getAttendancesByUserId,
+    getAttendanceCountByUserId
 };
