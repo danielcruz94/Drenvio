@@ -1,6 +1,6 @@
 const mongoose = require('mongoose'); // Para CommonJS
 
-const Attendance = require('../models/history'); // Ajusta la ruta según sea necesario
+const Attendance = require('../models/History'); // Ajusta la ruta según sea necesario
 
 const CalendarClass = require('../models/CalendarClass'); // Modelo para el calendario
 const User = require('../models/User'); // Modelo para los usuarios
