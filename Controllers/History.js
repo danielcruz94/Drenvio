@@ -1,5 +1,7 @@
 const mongoose = require('mongoose'); // Para CommonJS
+
 const Attendance = require('../models/history'); // Ajusta la ruta según sea necesario
+
 const CalendarClass = require('../models/CalendarClass'); // Modelo para el calendario
 const User = require('../models/User'); // Modelo para los usuarios
 
@@ -93,7 +95,6 @@ const User = require('../models/User'); // Modelo para los usuarios
 
             // Convertir userId a ObjectId
             const userObjectId = mongoose.Types.ObjectId(userId);
-            
 
             // 1. Buscar asistencias para el usuario especificado
             const attendances = await Attendance.find({
@@ -125,6 +126,7 @@ const User = require('../models/User'); // Modelo para los usuarios
             // 6. Consultar todos los usuarios relacionados con estos IDs
             const users = await User.find({
                 _id: { $in: allUserIds }
+
             }).select('name lastName role');
 
             // 7. Enviar la respuesta con los datos obtenidos
@@ -139,37 +141,9 @@ const User = require('../models/User'); // Modelo para los usuarios
         }
     };
 
-    const getAttendanceCountByUserId = async (req, res) => {
-        try {
-            const { userId } = req.params;
-    
-            // Validar si userId es un ObjectId válido
-            if (!mongoose.Types.ObjectId.isValid(userId)) {
-                return res.status(400).json({ message: 'ID de usuario inválido.' });
-            }
-    
-            // Convertir userId a ObjectId
-            const userObjectId = mongoose.Types.ObjectId(userId);
-    
-            // Contar el total de asistencias que cumplen con los criterios
-            const totalAttendances = await Attendance.countDocuments({
-                userId: userObjectId,
-                attended: true
-            });
-    
-            // Enviar la respuesta con el conteo
-            res.status(200).json({ total: totalAttendances });
-        } catch (error) {
-            // Manejo de errores
-            res.status(500).json({ message: 'Error al obtener el conteo de asistencias.', error });
-        }
-    };
-    
-
 
 module.exports = {
     createAttendance,
     updateAttendanceByUserId,
-    getAttendancesByUserId,
-    getAttendanceCountByUserId
+    getAttendancesByUserId
 };
