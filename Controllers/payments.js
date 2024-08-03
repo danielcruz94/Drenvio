@@ -3,9 +3,14 @@ require('dotenv').config();
 const fetch = require('node-fetch-commonjs');
 
   const createdOrder = async (req, res) => {
-    const amount=req.body.amount
+    const amount=req.body.amount  
     const base = "https://api-m.sandbox.paypal.com";
     const { PAYPAL_CLIENT_SECRET, PAYPAL_CLIENT_ID } = process.env;
+
+         
+      //const url = "https://torii-tau.vercel.app/api"
+      const url = "http://localhost:3001/api"      
+
     const order = {
       intent: "CAPTURE",
       purchase_units: [
@@ -20,8 +25,8 @@ const fetch = require('node-fetch-commonjs');
         brand_name: "toriiApp",
         landing_page: "NO_PREFERENCE",
         user_action: "PAY_NOW",
-        return_url: `http://localhost:3001/api/capturedorder`,
-        cancel_url: `http://localhost:3001/api/cancelpayment`,
+        return_url: `${url}/capturedorder`,
+        cancel_url: `${url}/cancelpayment`,
       },
     };
 
