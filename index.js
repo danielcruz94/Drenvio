@@ -1,15 +1,12 @@
 const connectDB=require('./dbConnection.js')
 const express=require('express');
 const app=express ();
-const cors=require("cors")
+const cors=require("cors");
 const emailRouter =require('./Routes/email');
-
 const usersRouter=require('./Routes/users');
 const calendarRouter = require('./Routes/CalendarClass'); 
 const UserOnline = require('./Routes/UserOnline.js');
-
 const history = require('./Routes/History.js');
-
 const PaypalRouter = require('./Routes/paypal_payment.js'); 
 
 
