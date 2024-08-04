@@ -6,8 +6,9 @@ const emailRouter =require('./Routes/email');
 const usersRouter=require('./Routes/users');
 const calendarRouter = require('./Routes/CalendarClass'); 
 const UserOnline = require('./Routes/UserOnline.js');
-const history = require('./Routes/History.js');
 const PaypalRouter = require('./Routes/paypal_payment.js'); 
+
+const history = require('./Routes/history');
 
 
 connectDB()
