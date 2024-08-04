@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const { 
@@ -8,16 +7,10 @@ const {
     getAttendanceCountByUserId  
 } = require('../Controllers/History'); // Ajusta la ruta según sea necesario
 
-// Ruta para crear una nueva entrada de asistencia
-// Crea una entrada de asistencia para cada usuario
+// Rutas
 router.post('/attendances', createAttendance);
-
-// Ruta para actualizar el estado de asistencia por userId
 router.put('/attendances/:userId', updateAttendanceByUserId);
-
-// Ruta para obtener todas las asistencias por userId
 router.get('/attendances/:userId', getAttendancesByUserId);
-
 router.get('/attendances/count/:userId', getAttendanceCountByUserId);
 
 module.exports = router;
