@@ -11,8 +11,8 @@ const fetch = require('node-fetch-commonjs');
         } = process.env;
 
 
-        //const url = "https://torii-tau.vercel.app/api"
-        const url = "http://localhost:3001/api"
+        const url = "https://torii-tau.vercel.app/api"
+        //const url = "http://localhost:3001/api"
 
         const order = {
             intent: "CAPTURE",
@@ -84,24 +84,23 @@ const fetch = require('node-fetch-commonjs');
 
             //return res.json(response.data);
             //return res.redirect( `https://www.paypal.com/`);
-            res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>Ejemplo con JavaScript Interno</title>
-        </head>
-        <body>      
-          <script>
-            window.addEventListener('DOMContentLoaded', () => {
-              // Intentar cerrar la ventana si es posible
-              if (window.opener) {
-                window.close();
-              }
-            });
-          </script>
-        </body>
-        </html>
-      `);
+        return  res.send(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Cerrar Ventana</title>
+                    </head>
+                    <body>
+                        <script>
+                            window.addEventListener('DOMContentLoaded', () => {                           
+                            if (window.opener) {
+                                window.close();
+                            }
+                            });
+                        </script>
+                    </body>
+                    </html>
+            `);
 
 
         } catch (error) {
