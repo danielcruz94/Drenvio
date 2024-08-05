@@ -11,8 +11,8 @@ const fetch = require('node-fetch-commonjs');
         } = process.env;
 
 
-        //const url = "https://torii-tau.vercel.app/api"
-        const url = "http://localhost:3001/api"
+        const url = "https://torii-tau.vercel.app/api"
+        // const url = "http://localhost:3001/api"
 
         const order = {
             intent: "CAPTURE",
@@ -138,8 +138,7 @@ const fetch = require('node-fetch-commonjs');
                 },
             });
 
-            console.log(solution.data)
-            console.log(solution.data.status)
+            
 
             return res.json(solution.data.status);
         } catch (error) {
