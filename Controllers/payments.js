@@ -137,8 +137,7 @@ const fetch = require('node-fetch-commonjs');
                 },
             });
 
-            console.log(solution.data)
-            console.log(solution.data.status)
+            
 
             return res.json(solution.data.status);
         } catch (error) {
