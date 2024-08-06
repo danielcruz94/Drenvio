@@ -9,7 +9,7 @@ const {
 
 // Rutas
 router.post('/attendances', createAttendance);
-router.put('/attendances/:userId', updateAttendanceByUserId);
+router.put('/attendances/:eventId/:userId', updateAttendanceByUserId);
 router.get('/attendances/:userId', getAttendancesByUserId);
 router.get('/attendances/count/:userId', getAttendanceCountByUserId);
 

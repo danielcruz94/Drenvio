@@ -65,6 +65,9 @@ const User = require('../models/User'); // Modelo para los usuarios
         try {
             const { eventId, userId } = req.params;  // Obtener ambos parámetros de la URL
 
+            console.log(eventId)
+            console.log(userId)
+
             if (!eventId || !userId) {
                 return res.status(400).json({ message: 'Faltan parámetros necesarios.' });
             }
