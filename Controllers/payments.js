@@ -147,14 +147,12 @@ const fetch = require('node-fetch-commonjs');
 
     };
 
-
     const cancelOrder = async (req, res) => {
 
 
         return res.json('CANCELED')
 
     }
-
 
 
 module.exports = {

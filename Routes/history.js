@@ -5,7 +5,7 @@ const {
     updateAttendanceByUserId, 
     getAttendancesByUserId,
     getAttendanceCountByUserId  
-} = require('../Controllers/History'); // Ajusta la ruta según sea necesario
+} = require('../Controllers/History'); 
 
 // Rutas
 router.post('/attendances', createAttendance);

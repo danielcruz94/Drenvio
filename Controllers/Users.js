@@ -41,8 +41,8 @@ const User = require('../models/User');
         token,
         id:user._id,
         role:user.role,
-        price:user.price 
-        
+        price:user.price, 
+        instagram: user.instagram
         
       })
 
