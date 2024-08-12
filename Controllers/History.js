@@ -76,46 +76,48 @@ const User = require('../models/User');
         }
     };
 
-    // Obtiene todas las asistencias para un usuario dado y realiza consultas adicionales
+   // Obtiene todas las asistencias para un usuario dado y realiza consultas adicionales
     const getAttendancesByUserId = async (req, res) => {
         try {
-            const { userId } = req.params;   
-            
-            console.log(userId)
-          
+            const { userId } = req.params;       
+
             if (!mongoose.Types.ObjectId.isValid(userId)) {
                 return res.status(400).json({ message: 'ID de usuario inválido.' });
             }
-           
-            const userObjectId = mongoose.Types.ObjectId(userId);
 
+            const userObjectId = mongoose.Types.ObjectId(userId);
+        
             const attendances = await Attendance.find({
                 userId: userObjectId,
                 attended: true
             }).sort({ timestamp: 1 });
-
-          
+            
             const totalAttendances = await Attendance.countDocuments({
                 userId: userObjectId,
                 attended: true
             });
-     
-            const eventIds = attendances.map(attendance => attendance.eventId);
-       
+
+        
+            const eventIds = attendances.map(attendance => attendance.eventId)
+                .filter(id => mongoose.Types.ObjectId.isValid(id));
+
+        
             const calendarClasses = await CalendarClass.find({
                 _id: { $in: eventIds }
             });
-          
-            const reservedUserIds = calendarClasses.flatMap(calendarClass => calendarClass.reserved);
-            const calendarUserIds = calendarClasses.map(calendarClass => calendarClass.userId);            
-          
-            const allUserIds = [...new Set([...reservedUserIds, ...calendarUserIds, userObjectId])];
+
+            const reservedUserIds = calendarClasses.flatMap(calendarClass => calendarClass.reserved)
+                .filter(id => mongoose.Types.ObjectId.isValid(id));
+            const calendarUserIds = calendarClasses.map(calendarClass => calendarClass.userId)
+                .filter(id => mongoose.Types.ObjectId.isValid(id));
             
+            const allUserIds = [...new Set([...reservedUserIds, ...calendarUserIds, userObjectId])]
+                .filter(id => mongoose.Types.ObjectId.isValid(id));
+    
             const users = await User.find({
                 _id: { $in: allUserIds }
-
             }).select('name lastName role');
-       
+
             res.status(200).json({
                 total: totalAttendances,
                 attendances,
@@ -123,9 +125,11 @@ const User = require('../models/User');
                 users
             });
         } catch (error) {
-            handleServerError(res, error); 
+            console.error('Error en getAttendancesByUserId:', error);
+            handleServerError(res, error);
         }
     };
+
 
     //Conteo de asistencias 
     const getAttendanceCountByUserId = async (req, res) => {
@@ -151,6 +155,44 @@ const User = require('../models/User');
             res.status(500).json({ message: 'Error en el servidor.', error });
         }
     };
+
+    // Controlador para actualizar el campo 'paid'
+    const updatePaidStatus = async (req, res) => {
+        try {
+            const { userId, count } = req.params;
+            const numberToUpdate = parseInt(count, 10);
+
+            if (isNaN(numberToUpdate) || numberToUpdate <= 0) {
+                return res.status(400).json({ message: 'Número de actualizaciones inválido.' });
+            }
+
+            if (!mongoose.Types.ObjectId.isValid(userId)) {
+                return res.status(400).json({ message: 'ID de usuario inválido.' });
+            }
+
+            const userObjectId = mongoose.Types.ObjectId(userId);
+
+            // Encuentra los documentos que coincidan con el userId y no tengan paid = true
+            const attendances = await Attendance.find({ userId: userObjectId, paid: false })
+                .sort({ timestamp: 1 })
+                .limit(numberToUpdate);
+
+            // Actualiza cada documento individualmente
+            const updates = attendances.map(attendance =>
+                Attendance.updateOne({ _id: attendance._id }, { $set: { paid: true } })
+            );
+
+            const result = await Promise.all(updates);
+
+            res.status(200).json({
+                message: 'Asistencias actualizadas correctamente.',
+                updatedCount: result.length
+            });
+        } catch (error) {
+            handleServerError(res, error);
+        }
+    };
+
     
 
 
@@ -158,5 +200,7 @@ module.exports = {
     createAttendance,
     updateAttendanceByUserId,
     getAttendancesByUserId,
-    getAttendanceCountByUserId
+    getAttendanceCountByUserId,
+    updatePaidStatus
+
 };
