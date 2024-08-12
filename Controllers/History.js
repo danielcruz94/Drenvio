@@ -138,7 +138,8 @@ const User = require('../models/User');
             
             const totalAttendances = await Attendance.countDocuments({
                 userId: userObjectId,
-                attended: true
+                attended: true,
+                paid: false
             });
 
             res.status(200).json({

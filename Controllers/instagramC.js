@@ -8,13 +8,13 @@ const clientId = '1320840705542274';
 const clientSecret = 'b7eb5b15a7a56382a50793b286d94429';
 
 //Cambiar de acuerdo a local o servidor
-//const redirectUri = 'https://192.168.1.51:5173/instagram';
-const redirectUri = 'https://toriiapp.netlify.app/instagram';
+const redirectUri = 'https://192.168.1.51:5173/instagram';
+//const redirectUri = 'https://toriiapp.netlify.app/instagram';
 
         // Inicia la autenticación con Instagram y devuelve la URL de redirección
         const startAuth = (req, res) => {
             const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=user_profile,user_media&response_type=code`;
-            console.log("hola");
+           
             res.json({ redirectUrl: authUrl }); // Devuelve la URL de redirección al cliente
         };
 
