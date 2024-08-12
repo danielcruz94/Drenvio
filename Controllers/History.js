@@ -79,7 +79,9 @@ const User = require('../models/User');
     // Obtiene todas las asistencias para un usuario dado y realiza consultas adicionales
     const getAttendancesByUserId = async (req, res) => {
         try {
-            const { userId } = req.params;           
+            const { userId } = req.params;   
+            
+            console.log(userId)
           
             if (!mongoose.Types.ObjectId.isValid(userId)) {
                 return res.status(400).json({ message: 'ID de usuario inválido.' });
