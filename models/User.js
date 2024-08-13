@@ -16,8 +16,8 @@ const UserSchema = new Schema({
   history: { type: [String] }, // Se ha añadido el tipo de datos a los arrays
   instagram: { type: String },
   country: { type: String },
-  connectedHours: { type: Number, default: "0 USD" },
-  price: { type: String, default: 0 },
+  connectedHours: { type: Number, default: 0 },
+  price: { type: String, default: "0 USD" },
   completeInfo: { type: Boolean, default: false },
   biography: { type: String, default: '¡Hola! Soy un apasionado/a de la conversación, los idiomas y los viajes...' },
   bank_account: { type: String }, // Nuevo campo bank_account
