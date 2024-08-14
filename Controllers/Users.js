@@ -42,7 +42,8 @@ const User = require('../models/User');
         id:user._id,
         role:user.role,
         price:user.price, 
-        instagram: user.instagram
+        instagram: user.instagram,
+        language: user.language
         
       })
 

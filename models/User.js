@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   photos: { type: [String] }, // Se ha añadido el tipo de datos a los arrays
   role: { type: String },
   joinedAt: { type: Date, default: Date.now },
-  language: { type: String },
+  language: { type: String, default: "" },
   goal: { type: String },
   teacherRates: { type: [String] }, // Se ha añadido el tipo de datos a los arrays
   appointments: { type: [Date] }, // Se ha añadido el tipo de datos a los arrays
@@ -20,8 +20,8 @@ const UserSchema = new Schema({
   price: { type: String, default: "0"},
   completeInfo: { type: Boolean, default: false },
   biography: { type: String, default: '¡Hola! Soy un apasionado/a de la conversación, los idiomas y los viajes...' },
-  bank_account: { type: String }, // Nuevo campo bank_account
-  bank: { type: String } // Nuevo campo bank
+  bank_account: { type: String }, 
+  bank: { type: String } 
 });
 
 // Configuración de `toJSON` para ocultar campos sensibles
