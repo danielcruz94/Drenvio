@@ -123,49 +123,48 @@ const upload = multer({ storage: storage });
     };
 
     // Controlador para descargar y guardar imágenes
+    const uploadImagesToCloudinary = async (req, res) => {
+        const { imageUrls } = req.body;
     
-    
-    const downloadAndUploadImages = async (req, res) => {
-        const { userId, imageUrls } = req.body;
-    
-        if (!userId || !imageUrls || !Array.isArray(imageUrls)) {
+        if (!imageUrls || !Array.isArray(imageUrls)) {
             return res.status(400).json({ error: 'Invalid input data' });
         }
-    
-        const baseUrl = 'http://torii-tau.vercel.app/uploads/'; 
     
         try {
             // Limit the number of images to the first 3
             const imagePromises = imageUrls.slice(0, 3).map(async (url) => {
-                // Download image from the provided URL
-                const response = await axios({ url, responseType: 'arraybuffer' });
+                // Download the image
+                const response = await axios({
+                    url,
+                    responseType: 'arraybuffer'
+                });
     
                 // Prepare FormData for Cloudinary upload
                 const form = new FormData();
                 form.append('file', response.data, { filename: 'image.jpg' });
-                form.append('upload_preset', 'your_upload_preset'); // Replace with your actual upload preset
+                form.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET); // Ensure you have this in your .env file
     
-                // Upload image to Cloudinary
+                // Upload the image to Cloudinary
                 const cloudinaryResponse = await axios.post(
                     'https://api.cloudinary.com/v1_1/danielcruz/image/upload',
                     form,
                     { headers: { ...form.getHeaders() } }
                 );
     
-                return cloudinaryResponse.data.secure_url; // Return the URL of the uploaded image
+                // Return the URL of the uploaded image
+                return cloudinaryResponse.data.secure_url;
             });
     
             // Wait for all image uploads to complete
-            const imageUrlsFromCloudinary = await Promise.all(imagePromises);
+            const uploadedImageUrls = await Promise.all(imagePromises);
     
             // Respond with the URLs of the uploaded images
-            res.json({ imageUrls: imageUrlsFromCloudinary });
+            res.json({ imageUrls: uploadedImageUrls });
         } catch (error) {
-            console.error('Error downloading and uploading images:', error.message);
-            res.status(500).json({ error: 'Error processing images' });
+            console.error('Error uploading images:', error.message);
+            res.status(500).json({ error: 'Error uploading images' });
         }
     };
-    
     
 
 module.exports = {
