@@ -124,7 +124,7 @@ const upload = multer({ storage: storage });
         return res.status(400).json({ error: 'Invalid input data' });
         }
     
-        const baseUrl = 'https://torii-tau.vercel.app/uploads/'; 
+        const baseUrl = 'http://torii-tau.vercel.app/uploads/'; 
         const userDir = path.join('uploads', userId);
     
         try {
