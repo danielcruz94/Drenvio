@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const path = require('path');  
 
 const connectDB = require('./dbConnection.js');
 const emailRouter = require('./Routes/email');
@@ -19,9 +18,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-//app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 
 app.use('/api', usersRouter);
 app.use('/api', calendarRouter);
