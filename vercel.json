@@ -17,5 +17,11 @@
 
 
     }
+  ],
+  "rewrites": [
+    { "source": "/uploads/(.*)", "destination": "/uploads/$1" }
   ]
+
 }
+
+
