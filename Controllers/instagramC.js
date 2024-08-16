@@ -5,12 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 require('dotenv').config();
-const axios = require('axios');
-const FormData = require('form-data');
-const fs = require('fs');
-const path = require('path');
-
-
 
 const clientId = '1320840705542274';
 const clientSecret = 'b7eb5b15a7a56382a50793b286d94429';
@@ -123,46 +117,56 @@ const upload = multer({ storage: storage });
     };
 
     // Controlador para descargar y guardar imágenes
-    const uploadImagesToCloudinary = async (req, res) => {
-        const { imageUrls } = req.body;
+    const downloadImages = async (req, res) => {
+        const { userId, imageUrls } = req.body;
     
-        if (!imageUrls || !Array.isArray(imageUrls)) {
-            return res.status(400).json({ error: 'Invalid input data' });
+        if (!userId || !imageUrls || !Array.isArray(imageUrls)) {
+        return res.status(400).json({ error: 'Invalid input data' });
         }
     
+        const baseUrl = 'http://torii-tau.vercel.app/uploads/'; 
+        const userDir = path.join('uploads', userId);
+    
         try {
-            // Limit the number of images to the first 3
-            const imagePromises = imageUrls.slice(0, 3).map(async (url) => {
-                // Download the image
-                const response = await axios({
-                    url,
-                    responseType: 'arraybuffer'
-                });
-    
-                // Prepare FormData for Cloudinary upload
-                const form = new FormData();
-                form.append('file', response.data, { filename: 'image.jpg' });
-                form.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET); // Ensure you have this in your .env file
-    
-                // Upload the image to Cloudinary
-                const cloudinaryResponse = await axios.post(
-                    'https://api.cloudinary.com/v1_1/danielcruz/image/upload',
-                    form,
-                    { headers: { ...form.getHeaders() } }
-                );
-    
-                // Return the URL of the uploaded image
-                return cloudinaryResponse.data.secure_url;
+        
+        if (fs.existsSync(userDir)) {
+        
+            const existingFiles = fs.readdirSync(userDir);  
+        
+            existingFiles.forEach(file => {
+            fs.unlinkSync(path.join(userDir, file));
+            });
+        } else {
+            
+            fs.mkdirSync(userDir, { recursive: true });
+        }  
+        
+        const imagePromises = imageUrls.slice(0, 3).map(async (url, index) => {
+            const response = await axios({
+            url: url,
+            responseType: 'stream',
             });
     
-            // Wait for all image uploads to complete
-            const uploadedImageUrls = await Promise.all(imagePromises);
+            const filePath = path.join(userDir, `image_${index}.jpg`);
+            response.data.pipe(fs.createWriteStream(filePath));
     
-            // Respond with the URLs of the uploaded images
-            res.json({ imageUrls: uploadedImageUrls });
+            return new Promise((resolve, reject) => {
+            response.data.on('end', () => resolve(filePath));
+            response.data.on('error', reject);
+            });
+        });
+    
+        const filePaths = await Promise.all(imagePromises);
+    
+        const fileUrls = filePaths.map(filePath => {
+            const relativePath = path.relative('uploads', filePath).replace(/\\/g, '/');
+            return `${baseUrl}${relativePath}`;
+        });
+    
+        res.json({ filePaths: fileUrls });
         } catch (error) {
-            console.error('Error uploading images:', error.message);
-            res.status(500).json({ error: 'Error uploading images' });
+        console.error('Error downloading images:', error.message);
+        res.status(500).json({ error: 'Error downloading images' });
         }
     };
     
