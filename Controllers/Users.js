@@ -274,6 +274,38 @@ const User = require('../models/User');
           }
         };
 
+        // Función para generar un rating aleatorio superior a 4
+const generateRandomRating = () => {
+  const min = 4.1;
+  const max = 5.0;
+  return (Math.random() * (max - min) + min).toFixed(1);
+};
+
+// Controlador para obtener usuarios con el rol "Tutor" y con picture diferente al valor predeterminado
+const getTutorsWithCustomPicture = async (req, res) => {
+  try {
+    const tutors = await User.find({
+      role: 'Tutor',
+      picture: { $ne: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' }
+    }).select('name picture country language');
+
+    const formattedTutors = tutors.map(tutor => ({
+      picture: tutor.picture,
+      alt: 'Tutor',
+      rating: generateRandomRating(), // Asegúrate de que esta función genere valores válidos
+      name: tutor.name,
+      language: tutor.language
+    }));
+
+    res.json(formattedTutors);
+  } catch (error) {
+    console.error('Error fetching tutors:', error);
+    res.status(500).json({ error: 'Error fetching tutors' });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -285,7 +317,8 @@ module.exports = {
   getUserById,
   upPhoto,
   updateBankDetails,
-  getBankDetails    
+  getBankDetails,
+  getTutorsWithCustomPicture    
 };
 
 

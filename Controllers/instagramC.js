@@ -5,13 +5,14 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 require('dotenv').config();
+const FormData = require('form-data');
 
 const clientId = '1320840705542274';
 const clientSecret = 'b7eb5b15a7a56382a50793b286d94429';
 
 // Cambiar de acuerdo a local o servidor
 // const redirectUri = 'https://localhost:5173/instagram';
- const redirectUri = 'https://toriiapp.netlify.app/instagram';
+const redirectUri = 'https://toriiapp.netlify.app/instagram';
 //const redirectUri = 'https://192.168.1.51:5173/instagram';
 
 
@@ -116,60 +117,56 @@ const upload = multer({ storage: storage });
     }
     };
 
-    // Controlador para descargar y guardar imágenes
+    // Controlador para descargar y guardar imágenes   
+    const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/danielcruz/image/upload';
+    const CLOUDINARY_UPLOAD_PRESET = 'ih5terca'; 
+
     const downloadImages = async (req, res) => {
         const { userId, imageUrls } = req.body;
-    
+
         if (!userId || !imageUrls || !Array.isArray(imageUrls)) {
-        return res.status(400).json({ error: 'Invalid input data' });
+            return res.status(400).json({ error: 'Invalid input data' });
         }
-    
-        const baseUrl = 'http://torii-tau.vercel.app/uploads/'; 
-        const userDir = path.join('uploads', userId);
-    
+
         try {
-        
-        if (fs.existsSync(userDir)) {
-        
-            const existingFiles = fs.readdirSync(userDir);  
-        
-            existingFiles.forEach(file => {
-            fs.unlinkSync(path.join(userDir, file));
+            const imagePromises = imageUrls.slice(0, 3).map(async (url) => {
+                try {
+                    // Descargar la imagen
+                    const response = await axios({
+                        url: url,
+                        responseType: 'stream',
+                    });
+
+                    // Preparar datos para la carga a Cloudinary
+                    const form = new FormData();
+                    form.append('file', response.data, { filename: 'image.jpg' });
+                    form.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+                    // Subir imagen a Cloudinary
+                    const uploadResponse = await axios.post(CLOUDINARY_URL, form, {
+                        headers: {
+                            ...form.getHeaders(),
+                        },
+                    });
+
+                    return uploadResponse.data.secure_url;
+                } catch (error) {
+                    console.error(`Error uploading image from URL ${url}:`, error.message);
+                    throw error;
+                }
             });
-        } else {
-            
-            fs.mkdirSync(userDir, { recursive: true });
-        }  
-        
-        const imagePromises = imageUrls.slice(0, 3).map(async (url, index) => {
-            const response = await axios({
-            url: url,
-            responseType: 'stream',
-            });
-    
-            const filePath = path.join(userDir, `image_${index}.jpg`);
-            response.data.pipe(fs.createWriteStream(filePath));
-    
-            return new Promise((resolve, reject) => {
-            response.data.on('end', () => resolve(filePath));
-            response.data.on('error', reject);
-            });
-        });
-    
-        const filePaths = await Promise.all(imagePromises);
-    
-        const fileUrls = filePaths.map(filePath => {
-            const relativePath = path.relative('uploads', filePath).replace(/\\/g, '/');
-            return `${baseUrl}${relativePath}`;
-        });
-    
-        res.json({ filePaths: fileUrls });
+
+            const fileUrls = await Promise.all(imagePromises);
+
+            res.json({ filePaths: fileUrls });
         } catch (error) {
-        console.error('Error downloading images:', error.message);
-        res.status(500).json({ error: 'Error downloading images' });
+            console.error('Error processing images:', error.message);
+            res.status(500).json({ error: 'Error processing images' });
         }
     };
-    
+
+module.exports = { downloadImages };
+
 
 module.exports = {
   startAuth,

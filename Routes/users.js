@@ -8,7 +8,8 @@ const {
   getUserById, 
   upPhoto,
   updateBankDetails,
-  getBankDetails 
+  getBankDetails,
+  getTutorsWithCustomPicture 
 } = require('../Controllers/Users');
 
 // Rutas existentes
@@ -19,6 +20,7 @@ Router.post('/userinformation', completeInfo);
 Router.get('/userdata', getUserData);
 Router.get('/user/:id', getUserById);
 Router.post('/user/update/photo', upPhoto);
+Router.get('/users/picture', getTutorsWithCustomPicture);
 
 // Ruta para actualizar detalles bancarios
 Router.put('/user/:id/bank-details', updateBankDetails);
