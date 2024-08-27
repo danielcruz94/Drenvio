@@ -43,7 +43,8 @@ const User = require('../models/User');
         role:user.role,
         price:user.price, 
         instagram: user.instagram,
-        language: user.language
+        language: user.language,
+        tutorial: user.tutorial
         
       })
 
@@ -275,36 +276,64 @@ const User = require('../models/User');
         };
 
         // Función para generar un rating aleatorio superior a 4
-const generateRandomRating = () => {
-  const min = 4.1;
-  const max = 5.0;
-  return (Math.random() * (max - min) + min).toFixed(1);
-};
+        const generateRandomRating = () => {
+          const min = 4.1;
+          const max = 5.0;
+          return (Math.random() * (max - min) + min).toFixed(1);
+        };
 
-// Controlador para obtener usuarios con el rol "Tutor" y con picture diferente al valor predeterminado
-const getTutorsWithCustomPicture = async (req, res) => {
-  try {
-    const tutors = await User.find({
-      role: 'Tutor',
-      picture: { $ne: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' }
-    }).select('name picture country language');
+        // Controlador para obtener usuarios con el rol "Tutor" y con picture diferente al valor predeterminado
+        const getTutorsWithCustomPicture = async (req, res) => {
+          try {
+            const tutors = await User.find({
+              role: 'Tutor',
+              picture: { $ne: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' }
+            }).select('name picture country language');
 
-    const formattedTutors = tutors.map(tutor => ({
-      picture: tutor.picture,
-      alt: 'Tutor',
-      rating: generateRandomRating(), // Asegúrate de que esta función genere valores válidos
-      name: tutor.name,
-      language: tutor.language
-    }));
+            const formattedTutors = tutors.map(tutor => ({
+              picture: tutor.picture,
+              alt: 'Tutor',
+              rating: generateRandomRating(), // Asegúrate de que esta función genere valores válidos
+              name: tutor.name,
+              language: tutor.language
+            }));
 
-    res.json(formattedTutors);
-  } catch (error) {
-    console.error('Error fetching tutors:', error);
-    res.status(500).json({ error: 'Error fetching tutors' });
-  }
-};
+            res.json(formattedTutors);
+          } catch (error) {
+            console.error('Error fetching tutors:', error);
+            res.status(500).json({ error: 'Error fetching tutors' });
+          }
+        };
 
-
+        const updateTutorial = async (req, res) => {
+          try {
+            const { id } = req.params; 
+            const { tutorial } = req.body;         
+           
+            if (!id || tutorial === undefined) {
+              return res.status(400).json({ error: 'ID de usuario y valor de tutorial son requeridos.' });
+            }        
+            
+            if (typeof tutorial !== 'boolean') {
+              return res.status(400).json({ error: 'El valor de tutorial debe ser un booleano.' });
+            }        
+          
+            const updatedUser = await User.findByIdAndUpdate(
+              id,
+              { tutorial },
+              { new: true, runValidators: true }
+            );        
+           
+            if (!updatedUser) {
+              return res.status(404).json({ error: 'Usuario no encontrado.' });
+            }        
+        
+            res.json(updatedUser);
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al actualizar el campo tutorial.' });
+          }
+        };
 
 
 
@@ -318,7 +347,8 @@ module.exports = {
   upPhoto,
   updateBankDetails,
   getBankDetails,
-  getTutorsWithCustomPicture    
+  getTutorsWithCustomPicture,
+  updateTutorial    
 };
 
 

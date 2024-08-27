@@ -21,7 +21,8 @@ const UserSchema = new Schema({
   completeInfo: { type: Boolean, default: false },
   biography: { type: String, default: '¡Hola! Soy un apasionado/a de la conversación, los idiomas y los viajes...' },
   bank_account: { type: String }, 
-  bank: { type: String } 
+  bank: { type: String },
+  tutorial: { type: Boolean, default: false }
 });
 
 // Configuración de `toJSON` para ocultar campos sensibles
