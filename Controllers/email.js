@@ -8,7 +8,7 @@ const enviarEmail = async (req, res) => {
     service: 'gmail', // Use Gmail's SMTP server
     auth: {
       user: 'teamtoriiapp@gmail.com', // Replace with actual sender email
-      pass: 'dgybcegilwsjwihm', // Replace with actual app password (not regular password)
+      pass: 'smup asae jtrk izni', // Replace with actual app password (not regular password)
     },
   });
 
