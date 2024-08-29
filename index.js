@@ -28,7 +28,7 @@ app.use('/api/email', emailRouter);
 app.use('/api', PaypalRouter);
 app.use('/api', instagramRoutes);
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
