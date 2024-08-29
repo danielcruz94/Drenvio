@@ -13,7 +13,9 @@ const clientSecret = 'b7eb5b15a7a56382a50793b286d94429';
 // Cambiar de acuerdo a local o servidor
 // const redirectUri = 'https://localhost:5173/instagram';
 const redirectUri = 'https://toriiapp.netlify.app/instagram';
+//const redirectUri = 'https://www.torii.com.co/';
 //const redirectUri = 'https://192.168.1.51:5173/instagram';
+
 
 
 // Configuración de multer para guardar archivos en una carpeta específica
