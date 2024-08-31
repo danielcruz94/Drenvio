@@ -10,6 +10,7 @@ const UserOnline = require('./Routes/UserOnline.js');
 const PaypalRouter = require('./Routes/paypalPayment.js');
 const history = require('./Routes/history');
 const instagramRoutes = require('./Routes/instagramR.js');
+const wompi = require('./Routes/wompi');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api', history);
 app.use('/api/email', emailRouter);
 app.use('/api', PaypalRouter);
 app.use('/api', instagramRoutes);
+app.use('/api', wompi);
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
