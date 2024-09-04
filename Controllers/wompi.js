@@ -13,7 +13,7 @@ const Wompi = require('../models/wompi');
           return res.status(400).json({ error: 'Faltan parámetros' });
         }
       
-        const integritySecret = 'test_integrity_yTA2Vi3uSITPgs9nPd41cq1fIMnO7Uaw';
+        const integritySecret = 'prod_integrity_TIQD6SFuQlYKZOepxBMUOMqifVCxZoOC';
       
         let baseString = `${reference}${amountInCents}${currency}${integritySecret}`;
 
@@ -45,7 +45,7 @@ const Wompi = require('../models/wompi');
       try {
         const event = req.body;
         const receivedChecksum = req.headers['x-event-checksum'];
-        const secret = 'test_events_fQakA3SvZ8UNrImwQVLjmVia0TeR2HiZ'; 
+        const secret = 'prod_events_62KYsnI3Gb6NG0wYQyIAtSfI2SZCXutw'; 
 
         let concatenatedString = '';
         event.signature.properties.forEach(prop => {
