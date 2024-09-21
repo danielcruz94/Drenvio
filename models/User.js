@@ -18,6 +18,7 @@ const UserSchema = new Schema({
   country: { type: String },
   connectedHours: { type: Number, default: 0 },
   price: { type: String, default: "0"},
+  points: { type: Number, default: 500 },
   completeInfo: { type: Boolean, default: false },
   biography: { type: String, default: '¡Hola! Soy un apasionado/a de la conversación, los idiomas y los viajes...' },
   bank_account: { type: String }, 

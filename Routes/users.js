@@ -10,7 +10,9 @@ const {
   updateBankDetails,
   getBankDetails,
   getTutorsWithCustomPicture,
-  updateTutorial 
+  updateTutorial,
+  getUserPoints,
+  updateUserPoints 
 } = require('../Controllers/Users');
 
 // Rutas existentes
@@ -23,6 +25,9 @@ Router.get('/user/:id', getUserById);
 Router.post('/user/update/photo', upPhoto);
 Router.get('/users/picture', getTutorsWithCustomPicture);
 Router.patch('/user/:id/tutorial', updateTutorial);
+Router.get('/users/:id/points', getUserPoints);
+// Ruta para actualizar los puntos de un usuario
+Router.patch('/users/:id/updatePoints', updateUserPoints);
 
 // Ruta para actualizar detalles bancarios
 Router.put('/user/:id/bank-details', updateBankDetails);

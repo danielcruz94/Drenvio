@@ -335,6 +335,57 @@ const User = require('../models/User');
           }
         };
 
+        const getUserPoints = async (req, res) => {
+          try {
+            const userId = req.params.id; // Obtener el ID del usuario de los parámetros de la ruta
+            const user = await User.findById(userId);
+        
+            if (!user) {
+              return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+        
+            return res.json({ points: user.points });
+          } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error en el servidor' });
+          }
+        };
+
+        // Controlador para actualizar los puntos de un usuario
+        const updateUserPoints = async (req, res) => {
+          const { id } = req.params; // ID del usuario desde los parámetros de la ruta
+          const { points } = req.body; // Nuevos puntos desde el cuerpo de la solicitud
+
+
+          console.log(id)
+          console.log(points)
+
+          try {
+            // Verifica que los puntos sean un número
+            if (typeof points !== 'number') {
+              return res.status(400).json({ message: 'Los puntos deben ser un número' });
+            }
+
+            // Actualiza el usuario
+            const updatedUser = await User.findByIdAndUpdate(
+              id,
+              { points },
+              { new: true, runValidators: true } // Devuelve el nuevo objeto y aplica validaciones
+            );
+
+            // Si el usuario no se encuentra
+            if (!updatedUser) {
+              return res.status(404).json({ updated: false });
+            }
+
+            // Responde con true si la actualización fue exitosa
+            return res.status(200).json({ updated: true });
+          } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error en el servidor', updated: false });
+          }
+        };
+
 
 
 module.exports = {
@@ -348,7 +399,9 @@ module.exports = {
   updateBankDetails,
   getBankDetails,
   getTutorsWithCustomPicture,
-  updateTutorial    
+  updateTutorial,
+  getUserPoints,
+  updateUserPoints    
 };
 
 
