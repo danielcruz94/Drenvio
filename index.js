@@ -31,7 +31,7 @@ app.use('/api', instagramRoutes);
 app.use('/api', wompi);
 
 //COMENTAR LA SIGUIENTE LINEA PARA ACTIVAR EL SSL
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
