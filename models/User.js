@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   lastName: { type: String },
   email: { type: String, required: true },
   passwordHash: { type: String, required: true },
-  picture: { type: String, default: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' },
+  picture: { type: String, default: '/Capa_1.png' },
   photos: { type: [String] }, // Se ha añadido el tipo de datos a los arrays
   role: { type: String },
   joinedAt: { type: Date, default: Date.now },

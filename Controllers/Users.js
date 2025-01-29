@@ -283,11 +283,12 @@ const User = require('../models/User');
         };
 
         // Controlador para obtener usuarios con el rol "Tutor" y con picture diferente al valor predeterminado
+        //picture se cambio la url
         const getTutorsWithCustomPicture = async (req, res) => {
           try {
             const tutors = await User.find({
               role: 'Tutor',
-              picture: { $ne: 'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1677509740.jpg' }
+              picture: { $ne: '/Capa_1.png' }
             }).select('name picture country language');
 
             const formattedTutors = tutors.map(tutor => ({
