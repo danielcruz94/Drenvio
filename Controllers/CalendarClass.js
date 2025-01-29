@@ -14,47 +14,48 @@ const User = require('../models/User');
                 const endDateTime = new Date(endTime);
                 const durationHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
                 
-                // Buscar clases existentes para el usuario en la fecha dada
-                const existingClasses = await CalendarClass.find({ userId, date });
-                
-                // Verificar si hay alguna superposición con las clases existentes
-                const overlappingClass = existingClasses.some(existingClass => {
-                    return (
-                        (startDateTime >= existingClass.startTime && startDateTime < existingClass.endTime) ||
-                        (endDateTime > existingClass.startTime && endDateTime <= existingClass.endTime) ||
-                        (startDateTime <= existingClass.startTime && endDateTime >= existingClass.endTime)
-                    );
-                });
-                
-                if (overlappingClass) {
-                    return res.status(400).json({ message: "El usuario ya tiene una clase en ese rango de horas para la misma fecha." });
-                }
-                
+                // Buscar clases existentes para el usuario
+                const existingClasses = await CalendarClass.find({ userId });               
+        
                 // Crear las nuevas clases
                 const newCalendarClasses = [];
                 for (let i = 0; i < durationHours; i++) {
                     const newStartDateTime = new Date(startDateTime.getTime() + (i * 60 * 60 * 1000));
-                    const newEndDateTime = new Date(newStartDateTime.getTime() + (60 * 60 * 1000));
-                    const newCalendarClass = {
-                        userId,
-                        date,
-                        endTime: newEndDateTime.toISOString(),
-                        startTime: newStartDateTime.toISOString(),
-                        price,
-                        reserved
-                    };
-                    newCalendarClasses.push(newCalendarClass);
+                    
+                    // Verificar si el startTime de la nueva clase ya existe en las clases existentes
+                    const overlap = existingClasses.some(existingClass => {
+                        return newStartDateTime.getTime() === new Date(existingClass.startTime).getTime();
+                    });
+        
+                    // Si no hay superposición, crear la nueva clase
+                    if (!overlap) {
+                        const newEndDateTime = new Date(newStartDateTime.getTime() + (60 * 60 * 1000));  // 1 hora de duración
+                        const newCalendarClass = {
+                            userId,
+                            date,
+                            endTime: newEndDateTime.toISOString(),
+                            startTime: newStartDateTime.toISOString(),
+                            price,
+                            reserved
+                        };
+                        newCalendarClasses.push(newCalendarClass);
+                    }
                 }
-                
-                // Insertar las nuevas clases en la base de datos en una sola operación
+        
+                // Verificar si se han creado nuevas clases
+                if (newCalendarClasses.length === 0) {
+                    return res.status(200).json({ message: "No se han agregado nuevas clases debido a que los horarios no estan disponibles." });
+                }
+        
+                // Insertar las nuevas clases en la base de datos
                 await CalendarClass.insertMany(newCalendarClasses);
                 
                 res.status(201).json({ message: "Clases creadas exitosamente." });
             } catch (error) {
                 handleServerError(res, error);
             }
-        };        
-
+        };
+             
         // Obtiene todas las clases del calendario para un usuario dado
         const getAllCalendarClasses = async (req, res) => {
             try {
