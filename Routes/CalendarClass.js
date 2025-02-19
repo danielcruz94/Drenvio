@@ -5,7 +5,8 @@ const {
     getCalendarClassesByUserId, 
     reserveCalendarClass, 
     getCalendarClassesByUser, 
-    getCalendarClassById // Agregado
+    getCalendarClassById,
+    cancelClass
 } = require('../Controllers/CalendarClass');
 
         // Ruta para crear una nueva clase de calendario
@@ -24,6 +25,9 @@ const {
         router.get('/calendar/classes/:studentId', getCalendarClassesByUser);
 
         // Ruta para obtener una clase de calendario por su ID
-        router.get('/calendar/class/:id', getCalendarClassById); // Agregado
+        router.get('/calendar/class/:id', getCalendarClassById); 
+
+        // Ruta para cancelar una clase de calendario por su ID
+        router.delete('/calendar/Cancelclass/:id', cancelClass);
 
 module.exports = router;

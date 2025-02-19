@@ -5,6 +5,7 @@ const CalendarClassSchema = new Schema({
     date: { type: Date },
     startTime: { type: Date },
     endTime: { type: Date },
+    price: { type: Number, default: 0 },
     reserved: { type: String }, 
 });
 
