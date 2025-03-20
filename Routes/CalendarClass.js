@@ -6,7 +6,8 @@ const {
     reserveCalendarClass, 
     getCalendarClassesByUser, 
     getCalendarClassById,
-    cancelClass
+    cancelClass,
+    tutorcancelClass
 } = require('../Controllers/CalendarClass');
 
         // Ruta para crear una nueva clase de calendario
@@ -29,5 +30,8 @@ const {
 
         // Ruta para cancelar una clase de calendario por su ID
         router.delete('/calendar/Cancelclass/:id', cancelClass);
+
+        // Ruta para cancelar una clase de calendario por su ID del tutor
+        router.delete('/calendar/TutorCancelclass/:id', tutorcancelClass);
 
 module.exports = router;

@@ -7,6 +7,7 @@ const CalendarClassSchema = new Schema({
     endTime: { type: Date },
     price: { type: Number, default: 0 },
     reserved: { type: String }, 
+    cancel: { type: Boolean, default: false }
 });
 
 const CalendarClass = model('CalendarClass', CalendarClassSchema);
