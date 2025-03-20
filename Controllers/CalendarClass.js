@@ -1,5 +1,6 @@
 const CalendarClass = require('../models/CalendarClass');
 const User = require('../models/User'); 
+const mongoose = require('mongoose');
 
         const handleServerError = (res, error) => {
             console.error(error);
@@ -12,16 +13,30 @@ const User = require('../models/User');
                 const { userId, date, endTime, startTime, reserved, price } = req.body;
                 const startDateTime = new Date(startTime);
                 const endDateTime = new Date(endTime);
+                
+                // Asegurarse de que startDateTime tenga los segundos y milisegundos en 0
+                startDateTime.setSeconds(0);
+                startDateTime.setMilliseconds(0);
+        
+                // Asegurarse de que endDateTime tenga los segundos y milisegundos en 0
+                endDateTime.setSeconds(0);
+                endDateTime.setMilliseconds(0);
+                
                 const durationHours = (endDateTime - startDateTime) / (1000 * 60 * 60);
                 
                 // Buscar clases existentes para el usuario
-                const existingClasses = await CalendarClass.find({ userId });               
+                const existingClasses = await CalendarClass.find({ userId });
         
                 // Crear las nuevas clases
                 const newCalendarClasses = [];
                 for (let i = 0; i < durationHours; i++) {
+                    // Crear un nuevo startDateTime para cada hora y asegurarse que los segundos estén en 0
                     const newStartDateTime = new Date(startDateTime.getTime() + (i * 60 * 60 * 1000));
                     
+                    // Establecer los segundos y milisegundos en 0 para el nuevo startDateTime
+                    newStartDateTime.setSeconds(0);
+                    newStartDateTime.setMilliseconds(0);
+        
                     // Verificar si el startTime de la nueva clase ya existe en las clases existentes
                     const overlap = existingClasses.some(existingClass => {
                         return newStartDateTime.getTime() === new Date(existingClass.startTime).getTime();
@@ -30,6 +45,11 @@ const User = require('../models/User');
                     // Si no hay superposición, crear la nueva clase
                     if (!overlap) {
                         const newEndDateTime = new Date(newStartDateTime.getTime() + (60 * 60 * 1000));  // 1 hora de duración
+                        
+                        // Establecer los segundos y milisegundos en 0 para el nuevo endDateTime
+                        newEndDateTime.setSeconds(0);
+                        newEndDateTime.setMilliseconds(0);
+        
                         const newCalendarClass = {
                             userId,
                             date,
@@ -49,12 +69,13 @@ const User = require('../models/User');
         
                 // Insertar las nuevas clases en la base de datos
                 await CalendarClass.insertMany(newCalendarClasses);
-                
+        
                 res.status(201).json({ message: "Clases creadas exitosamente." });
             } catch (error) {
                 handleServerError(res, error);
             }
         };
+        
              
         // Obtiene todas las clases del calendario para un usuario dado
         const getAllCalendarClasses = async (req, res) => {
@@ -147,6 +168,7 @@ const User = require('../models/User');
        const cancelClass = async (req, res) => {
         const { id } = req.params;
         const utcDateTime = new Date(req.query.utcDate);
+        console.log(id)
     
         try {
             const calendarClass = await CalendarClass.findById(id);
@@ -202,6 +224,61 @@ const User = require('../models/User');
     };
     
 
+      // Cancelar Clase tutor    
+      const tutorcancelClass = async (req, res) => {
+       
+        const { id } = req.params;  
+        const { startTime } = req.query;      
+    
+        // Verificar si `classID` es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'ID de clase no válido' });
+        }
+    
+        // Validar que `startTime` no sea undefined o null
+        if (!startTime) {
+            return res.status(400).json({ message: 'Se requiere startTime' });
+        }
+    
+        // Intentar convertir `startTime` a un objeto Date
+        const classStartTime = new Date(startTime);
+        if (isNaN(classStartTime.getTime())) {
+            return res.status(400).json({ message: 'Formato de startTime no válido' });
+        }
+    
+        try {
+            // Buscar la clase en la base de datos
+            const calendarClass = await CalendarClass.findById(id);
+    
+            if (!calendarClass) {
+                return res.status(404).json({ message: 'Clase no encontrada' });
+            }
+    
+            // Verificar si ya está cancelada
+            if (calendarClass.cancel === true) {
+                return res.json({ message: 'La clase ya está cancelada' });
+            }
+    
+            // Obtener la hora actual en UTC
+            const now = new Date();
+            const timeDifference = Math.abs(classStartTime - now);
+            const oneHourInMillis = 60 * 60 * 1000; // 1 hora en milisegundos
+    
+            if (timeDifference > oneHourInMillis) {
+                // Si se puede cancelar, actualizar el estado de la clase
+                calendarClass.cancel = true;
+                await calendarClass.save();
+    
+                return res.json({ message: 'Clase cancelada', class: calendarClass });
+            } else {
+                return res.json({ message: 'No es posible cancelar la clase. Debe ser cancelada con al menos 1 hora de antelación' });
+            }
+        } catch (error) {
+            console.error('Error al cancelar la clase:', error);
+            return res.status(500).json({ message: 'Error en el servidor' });
+        }
+    };
+    
 
 
 
@@ -212,5 +289,6 @@ module.exports = {
     reserveCalendarClass,
     getCalendarClassesByUser,
     getCalendarClassById,
-    cancelClass
+    cancelClass,
+    tutorcancelClass
 };
