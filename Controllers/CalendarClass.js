@@ -221,63 +221,74 @@ const mongoose = require('mongoose');
                 message: 'Error en el servidor'
             });
         }
-    };
+       };
     
 
       // Cancelar Clase tutor    
       const tutorcancelClass = async (req, res) => {
-       
-        const { id } = req.params;  
-        const { startTime } = req.query;      
+        const { id } = req.params;
+        const { startTime } = req.query;    
     
-        // Verificar si `classID` es un ObjectId válido
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: 'ID de clase no válido' });
-        }
-    
-        // Validar que `startTime` no sea undefined o null
+        }    
+       
         if (!startTime) {
             return res.status(400).json({ message: 'Se requiere startTime' });
         }
     
-        // Intentar convertir `startTime` a un objeto Date
         const classStartTime = new Date(startTime);
         if (isNaN(classStartTime.getTime())) {
             return res.status(400).json({ message: 'Formato de startTime no válido' });
         }
     
         try {
-            // Buscar la clase en la base de datos
+            
             const calendarClass = await CalendarClass.findById(id);
     
             if (!calendarClass) {
                 return res.status(404).json({ message: 'Clase no encontrada' });
             }
-    
-            // Verificar si ya está cancelada
-            if (calendarClass.cancel === true) {
-                return res.json({ message: 'La clase ya está cancelada' });
-            }
-    
-            // Obtener la hora actual en UTC
-            const now = new Date();
-            const timeDifference = Math.abs(classStartTime - now);
-            const oneHourInMillis = 60 * 60 * 1000; // 1 hora en milisegundos
-    
-            if (timeDifference > oneHourInMillis) {
-                // Si se puede cancelar, actualizar el estado de la clase
+            
+            if (calendarClass.cancel === undefined || calendarClass.cancel === false) {
                 calendarClass.cancel = true;
-                await calendarClass.save();
-    
-                return res.json({ message: 'Clase cancelada', class: calendarClass });
-            } else {
-                return res.json({ message: 'No es posible cancelar la clase. Debe ser cancelada con al menos 1 hora de antelación' });
             }
+                
+            await calendarClass.save();    
+           
+            const reservedUserId = calendarClass.reserved; 
+            if (reservedUserId) {
+            
+                const points = calendarClass.price * 100;    
+               
+                const reservedUser = await User.findById(reservedUserId);
+                if (reservedUser) {
+                   
+                    reservedUser.points += points;
+                    await reservedUser.save();
+                   
+                    return res.json({
+                        message: 'Clase cancelada...',
+                        points: reservedUser.points,
+                        class: calendarClass
+                    });
+                } else {
+                    return res.json({
+                        message: 'Clase cancelada...'
+                    });
+                }
+            } else {
+                return res.json({
+                     message: 'Clase cancelada...'
+                });
+            }
+    
         } catch (error) {
             console.error('Error al cancelar la clase:', error);
             return res.status(500).json({ message: 'Error en el servidor' });
         }
     };
+    
     
 
 
