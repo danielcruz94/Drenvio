@@ -5,6 +5,8 @@ const Attendance = require('../models/History');
 const CalendarClass = require('../models/CalendarClass'); 
 const User = require('../models/User'); 
 
+//CNSOS
+
     const handleServerError = (res, error) => {
         console.error(error);
         res.status(500).json({ error: error.message || 'Error interno del servidor' });
