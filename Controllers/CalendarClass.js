@@ -77,17 +77,25 @@ const mongoose = require('mongoose');
         };
         
              
-        // Obtiene todas las clases del calendario para un usuario dado
+        // Obtiene todas las clases disponibles publicadas por el tutor
         const getAllCalendarClasses = async (req, res) => {
             try {
-                const userId = req.query.userId;
-                const calendarClasses = await CalendarClass.find({ userId }).sort({ startTime: 1 });
+                const userId = req.query.userId;              
+        
+                const currentTime = new Date();       
+               
+                const calendarClasses = await CalendarClass.find({
+                    userId,
+                    endTime: { $gte: currentTime }
+                }).sort({ startTime: 1 });                     
+        
                 res.status(200).json(calendarClasses);
             } catch (error) {
+                console.error("Error:", error); 
                 handleServerError(res, error);
             }
         };
-
+        
         // Obtiene todas las clases del calendario para un usuario dado
         const getCalendarClassesByUserId = async (req, res) => {
             try {
@@ -133,23 +141,30 @@ const mongoose = require('mongoose');
             }
         };
                
-        // Obtiene todas las clases del calendario reservadas por un estudiante dado
-        const getCalendarClassesByUser = async (req, res) => {
-            try {
-                const studentId = req.params.studentId;
-                if (!studentId) {
-                    throw new Error('Student ID is missing.');
+       // obtiene las clases del calendario para el estudiante 
+       const getCalendarClassesByUser = async (req, res) => {
+                try {
+            
+                    const studentId = req.params.studentId;
+                    if (!studentId) {
+                        throw new Error('Student ID is missing.');
+                    }
+            
+                    const currentTime = new Date();                       
+                    
+                    const calendarClasses = await CalendarClass.find({
+                        reserved: { $regex: new RegExp('^' + studentId + '$', 'i') },
+                        endTime: { $gte: currentTime } 
+                    }).sort({ startTime: 1 });        
+                
+                    res.status(200).json(calendarClasses); 
+            
+                } catch (error) {
+                    console.error("Error:", error); 
+                    handleServerError(res, error);
                 }
-                const calendarClasses = await CalendarClass.find({ reserved: { $regex: new RegExp('^' + studentId + '$', 'i') } }).sort({ startTime: 1 });
-                if (!calendarClasses || calendarClasses.length === 0) {
-                    throw new Error('No calendar classes found for the student.');
-                }
-                res.status(200).json(calendarClasses);
-            } catch (error) {
-                handleServerError(res, error);
-            }
         };
-
+            
         // Obtiene una clase del calendario por su ID
         const getCalendarClassById = async (req, res) => {
             try {
