@@ -33,9 +33,9 @@ const fetch = require('node-fetch-commonjs');
 
         try {
             const auth = Buffer.from(
-                "Ac1qy1cFXogAa7YTGGXPqom7sNjPiq4ZinSUm7JYpZW7gRyffKH0K99OKjKJqECPyYrArNhFgAj9WTl0" +
+                "AeO-um8zrvmqdSaHtWiqgzC0BqfYL9LiofIo7KfVulHS6lNZX8aigypuuNptEDJvvcx5cUmpH4zTRybq" +
                 ":" +
-                "EK1hlpZKoeCtZq7Bh5XcRpT8c3X87zradoM48a0uIihcd9ZwuZmuY0KyugSsDX6dakLXiQIGzPf3lyah"
+                "EKK8-7z40G6WpS7AhtlGQWANBUBpyPhSW8ViDoMxXTQ9buhrDkXwA73reyI_Bey-tKGgvSUG4CGYHLuz"
             ).toString("base64");
             const response = await fetch(`${base}/v1/oauth2/token`, {
                 method: "POST",
@@ -74,8 +74,8 @@ const fetch = require('node-fetch-commonjs');
             const response = await axios.post(
                 `${base}/v2/checkout/orders/${token}/capture`, {}, {
                     auth: {
-                        username: "Ac1qy1cFXogAa7YTGGXPqom7sNjPiq4ZinSUm7JYpZW7gRyffKH0K99OKjKJqECPyYrArNhFgAj9WTl0",
-                        password: "EK1hlpZKoeCtZq7Bh5XcRpT8c3X87zradoM48a0uIihcd9ZwuZmuY0KyugSsDX6dakLXiQIGzPf3lyah",
+                        username: "AeO-um8zrvmqdSaHtWiqgzC0BqfYL9LiofIo7KfVulHS6lNZX8aigypuuNptEDJvvcx5cUmpH4zTRybq",
+                        password: "EKK8-7z40G6WpS7AhtlGQWANBUBpyPhSW8ViDoMxXTQ9buhrDkXwA73reyI_Bey-tKGgvSUG4CGYHLuz",
                     },
                 }
             );
@@ -116,9 +116,9 @@ const fetch = require('node-fetch-commonjs');
             } = req.body;
             const base = "https://api-m.sandbox.paypal.com";
             const auth = Buffer.from(
-                "Ac1qy1cFXogAa7YTGGXPqom7sNjPiq4ZinSUm7JYpZW7gRyffKH0K99OKjKJqECPyYrArNhFgAj9WTl0" +
+                "AeO-um8zrvmqdSaHtWiqgzC0BqfYL9LiofIo7KfVulHS6lNZX8aigypuuNptEDJvvcx5cUmpH4zTRybq" +
                 ":" +
-                "EK1hlpZKoeCtZq7Bh5XcRpT8c3X87zradoM48a0uIihcd9ZwuZmuY0KyugSsDX6dakLXiQIGzPf3lyah"
+                "EKK8-7z40G6WpS7AhtlGQWANBUBpyPhSW8ViDoMxXTQ9buhrDkXwA73reyI_Bey-tKGgvSUG4CGYHLuz"
             ).toString("base64");
             const response = await fetch(`${base}/v1/oauth2/token`, {
                 method: "POST",
