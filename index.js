@@ -2,8 +2,6 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const http = require('http');
-const https = require('https');  // Importamos el módulo https
-const fs = require('fs');        // Para leer los archivos de certificado
 const socketIo = require('socket.io');
 const connectDB = require('./dbConnection.js');
 
@@ -21,18 +19,7 @@ const instagramRoutes = require('./Routes/instagramR.js');
 const wompi = require('./Routes/wompi');
 
 const app = express();
-
-// Archivos de certificado SSL (debes tener estos archivos en tu servidor)
-const sslOptions = {
-  key: fs.readFileSync('path/to/your/private-key.pem'),  // Ruta a la llave privada
-  cert: fs.readFileSync('path/to/your/certificate.pem'),  // Ruta al certificado
-  ca: fs.readFileSync('path/to/your/ca-certificate.pem')  // Ruta al certificado CA, si es necesario
-};
-
-// Crear el servidor HTTPS
-const server = https.createServer(sslOptions, app);
-
-// Configurar Socket.IO sobre HTTPS
+const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "*",
@@ -163,5 +150,5 @@ io.on('connection', (socket) => {
 // Puerto del servidor
 const port = process.env.PORT || 3001;
 server.listen(port, () => {
-  console.log(`🚀 Server running securely on port ${port}`);
+  console.log(`🚀 Server running on port ${port}`);
 });
