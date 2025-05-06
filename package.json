@@ -28,7 +28,10 @@
     "node-fetch": "^3.3.2",
     "node-fetch-commonjs": "^3.3.2",
     "nodemailer": "^6.9.10",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "vercel": "^34.2.5"
   }
 }
